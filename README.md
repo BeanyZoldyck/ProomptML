@@ -1,77 +1,30 @@
-# ProomptML
+# PoomptML
 
-XML prompt generation for OpenCode. Write structured prompts fast.
+An XML tag helper for writing prompts. Built with Python and customtkinter.
 
-There's also a Python GUI for clipboard-based workflows, but this is the main event.
+## What it does
 
-## Install globally (all projects)
+PoomptML gives you a quick way to insert XML tags while writing prompts. Press `Ctrl+Space` to open a palette, type a tag name, and hit Enter. The app inserts `<tag></tag>` with your cursor positioned inside the opening and closing tags.
 
-Copy two files to your OpenCode config directory:
-
-```
-~/.config/opencode/
-├── commands/
-│   └── xml.md
-└── plugins/
-    └── xml-prompt.js
-```
-
-Restart OpenCode. That's it — `/xml` works everywhere now.
-
-## Install per-project
-
-Either clone this repo and run OpenCode from inside it, or copy the `.opencode/` folder into your own project. OpenCode discovers plugins and commands automatically.
+The editor is a plain text area with monospace font. Whatever you've written gets copied to your clipboard when you press `Shift+Enter` or `Ctrl+Enter`.
 
 ## Usage
 
-Type `/xml` followed by your prompt parts:
+- `Ctrl+Space` — open the tag palette
+- `Enter` (in palette) — insert the tag and close the palette
+- `Escape` — cancel
+- `Shift+Enter` or `Ctrl+Enter` — copy entire editor contents to clipboard
 
-```
-/xml task build a REST API
-context user management with roles and permissions
-constraints Node.js only, use Express
-output_format JSON responses
-```
+If `Ctrl+Space` is captured by your IME or OS, change `TAG_PALETTE_SEQUENCE` at the top of `main.py` to something like `<Control-q>` or `<F2>`.
 
-Submit (Shift+Enter between lines), and the plugin transforms it into:
+## Tag name rules
 
-```xml
-<task>build a REST API</task>
-<context>user management with roles and permissions</context>
-<constraints>Node.js only, use Express</constraints>
-<output_format>JSON responses</output_format>
-```
+Tag names must start with a letter or underscore, followed by any combination of letters, numbers, dots, underscores, hyphens, or colons. So `role`, `context`, `examples`, `user_profile_1` are all valid.
 
-Each line becomes a tag. The first word is the tag name, everything after is the content. Lines starting with `#` are ignored. A bare word with no content becomes a self-closing tag.
-
-## How it works
-
-- **`.opencode/commands/xml.md`** registers `/xml` as a valid command. Without it, OpenCode doesn't know the command exists.
-- **`.opencode/plugins/xml-prompt.js`** hooks into `command.execute.before`. It takes the arguments (your raw text), splits by newline, wraps each line in XML tags, and mutates the parts array in place.
-
-The plugin only activates for the `xml` command, so other commands pass through unchanged.
-
-## Python GUI
-
-`main.py` is a standalone XML editor using customtkinter. No OpenCode needed — paste the output anywhere.
+## Running
 
 ```bash
-pip install -r requirements.txt
 python main.py
 ```
 
-- `Ctrl+Space` opens a tag palette. Type a name, hit Enter — inserts `<tag></tag>` with the cursor inside.
-- `Shift+Enter` or `Ctrl+Enter` copies the full editor content to your clipboard.
-
-## File layout
-
-```
-.
-├── .opencode/
-│   ├── commands/
-│   │   └── xml.md          # registers /xml command
-│   └── plugins/
-│       └── xml-prompt.js   # transforms arguments to XML tags
-├── main.py                  # Python GUI (standalone)
-└── requirements.txt
-```
+Requires Python 3.10+ and customtkinter (`pip install custom-tkinter`).
