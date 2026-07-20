@@ -28,9 +28,9 @@ Type `/xml` followed by your prompt parts:
 
 ```
 /xml task build a REST API
-context user management with roles and permissions
-constraints Node.js only, use Express
-output_format JSON responses
+/context user management with roles and permissions
+/constraints Node.js only, use Express
+/output_format JSON responses
 ```
 
 Submit (Shift+Enter between lines), and the plugin transforms it into:
